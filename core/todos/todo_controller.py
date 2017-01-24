@@ -13,6 +13,7 @@ def todos_config(setup_state):
 	todos.db = setup_state.app.config['MONGODB'].todos
 
 @todos.route('/todos', methods=['GET'], strict_slashes=False)
+@require_auth
 def get_todos():
 	records = list(todos.db.find().sort('updated_at', -1))
 
@@ -23,6 +24,7 @@ def get_todos():
 	)
 
 @todos.route('/todos', methods=['POST'], strict_slashes=False)
+@require_auth
 def create_todo():
 	body = request.get_json()
 
@@ -39,6 +41,7 @@ def create_todo():
 	)
 
 @todos.route('/todos/<string:todo_id>', methods=['PUT'], strict_slashes=False)
+@require_auth
 def update_todo(todo_id):
 	body = request.get_json()
 
@@ -55,6 +58,7 @@ def update_todo(todo_id):
 	)
 
 @todos.route('/todos/<string:todo_id>', methods=['DELETE'], strict_slashes=False)
+@require_auth
 def delete_todo(todo_id):
 	todos.db.delete_one({'_id': ObjectId(todo_id)})
 

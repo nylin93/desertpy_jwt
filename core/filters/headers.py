@@ -1,4 +1,4 @@
-from flask import current_app, request, current_app
+from flask import current_app, request
 
 
 def require_from_header():
