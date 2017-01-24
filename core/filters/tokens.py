@@ -11,10 +11,10 @@ def require_auth(func):
 	def check_jwt(*args, **kwargs):
 		now = time.time()
 		conf = current_app.config
-		print(request.cookies)
+
 		if conf['JWT_NAME'] not in request.cookies:
 			return Response(
-				response=json_util.dumps({'error 1': 'Unauthorized'}),
+				response=json_util.dumps({'error': 'Unauthorized'}),
 				status=401,
 				mimetype='application/json'
 			)
@@ -23,14 +23,14 @@ def require_auth(func):
 			token = decode(cookie, conf['JWT_SECRET'], algorithms='HS256')	
 		except JWTError:
 			return Response(
-				response=json_util.dumps({'error 2': 'Unauthorized'}),
+				response=json_util.dumps({'error': 'Unauthorized'}),
 				status=401,
 				mimetype='application/json'
 			)
 			
 		if now > token['exp']:
 			return Response(
-				response=json_util.dumps({'error 3': 'Unauthorized'}),
+				response=json_util.dumps({'error': 'Unauthorized'}),
 				status=401,
 				mimetype='application/json'
 			)
