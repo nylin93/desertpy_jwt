@@ -2,6 +2,8 @@ from flask import request, Response, Blueprint
 from bson import json_util
 from bson.objectid import ObjectId
 
+from core.filters import require_auth
+
 
 todos = Blueprint('todos', __name__)
 todos.db = None
