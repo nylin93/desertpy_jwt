@@ -15,8 +15,21 @@ def jwt_config(setup_state):
 
 @jwt.route('/jwt', methods=['POST'], strict_slashes=False)
 def create_jwt():
-	# Pretend to do some backend lookups to check password etc.
-	# TODO Create a token and encode it
-	# TODO then set the cookie in the response with httponly=True 
+	now = time.time()
+	token = {
+		'iss': now,
+		'exp': now + jwt.expiration
+	}
 
-	pass
+	cookie = encode(token, jwt.secret, algorithm='HS256')
+	res = Response(
+		response=json_util.dumps({'authenticated': True}),
+		status=200,
+		mimetype='application/json'
+	)
+
+	res.set_cookie(jwt.name, cookie, 
+		expires=now+jwt.expiration, 
+		httponly=True
+	)
+	return res
